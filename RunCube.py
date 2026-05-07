@@ -491,7 +491,7 @@ def scramble_func():
 
 # Setting up the scramble button
 scramble_button = Button(root, text="Scramble", command=scramble_func)
-scramble_button.configure(width=5, state=DISABLED)
+scramble_button.configure(width=5, state=NORMAL)
 scramble_button.grid(row=23, column=9)
 
 # Setting up the previous labels
