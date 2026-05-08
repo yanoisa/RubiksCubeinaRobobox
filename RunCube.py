@@ -411,7 +411,7 @@ def solve_optimize_func(rotation_list, list_of_cubies, temp_error, window_, cube
     button_rotate_right.configure(state=DISABLED)
     button_rotate_up.configure(state=DISABLED)
     button_rotate_down.configure(state=DISABLED)
-    scramble_button.configure(state=DISABLED)
+    #scramble_button.configure(state=DISABLED)
 
 
 # Setting up the button which calls the solving function
@@ -465,8 +465,8 @@ def submit(list_of_cubies, list_of_solved_cubies, list_of_cubies_ids, rotation_l
         if solve_optimize_button["state"] == "disabled":
             solve_optimize_button.configure(state=NORMAL)
 
-        if scramble_button["state"] == "disabled":
-            scramble_button.configure(state=NORMAL)
+        #if scramble_button["state"] == "disabled":
+        #    scramble_button.configure(state=NORMAL)
 
         next_step_button.configure(state=DISABLED)
         previous_step_button.configure(state=DISABLED)
@@ -490,9 +490,9 @@ def scramble_func():
 
 
 # Setting up the scramble button
-scramble_button = Button(root, text="Scramble", command=scramble_func)
-scramble_button.configure(width=5, state=NORMAL)
-scramble_button.grid(row=23, column=9)
+#scramble_button = Button(root, text="Scramble", command=scramble_func)
+#scramble_button.configure(width=5, state=NORMAL)
+#scramble_button.grid(row=23, column=9)
 
 # Setting up the previous labels
 previous_label = Label(root, font=hint_font_bold, text="Previous step:")
@@ -655,7 +655,7 @@ def reset_to_default(list_of_cubies, start_idx, prev_text, next_text):
     button_rotate_right.configure(state=NORMAL)
     button_rotate_up.configure(state=NORMAL)
     button_rotate_down.configure(state=NORMAL)
-    scramble_button.configure(state=NORMAL)
+    #scramble_button.configure(state=NORMAL)
 
 
 # Setting up the default reset button
