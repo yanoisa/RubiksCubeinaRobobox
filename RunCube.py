@@ -5,6 +5,7 @@ from GUI import *
 from FileHandler import *
 from Solver import *
 from Optimize import *
+import requests
 
 # Creating the workspace
 # root is the whole working space; it defines the properties of the popup
@@ -12,6 +13,11 @@ root = Tk()
 
 root.title("Rubik's Cube - Hexomino")
 root.geometry("1920x1080")
+
+# Pi's IP fixed
+PI_IP = "192.168.1.10"  
+PI_PORT = 5000
+
 
 
 # Setting a default value for the column and row size
@@ -512,7 +518,7 @@ next_text_label.grid(row=9, column=12, sticky=W)
 
 def previous_step_func(start_idx):
     """
-    Wrapper function to handle the previous step. (Supposed to be bound to a button)
+    Wrapper function to handle the previous step. 
     """
 
     # if the start index should be greater/equal to the length of the rotations lost
@@ -522,6 +528,7 @@ def previous_step_func(start_idx):
 
     # if the index is greater than 0, a valid previous operation can be performed
     if start_idx[0] > 0:
+        #current_move = rotations[start_idx[0]]
         # decreasing the index
         start_idx[0] -= 1
         # calling previous operation to handle the rotation
@@ -546,7 +553,7 @@ previous_step_button.grid(row=19, column=4, sticky=W+E)
 
 def next_step_func(start_idx):
     """
-    Wrapper function to handle the next step. (Supposed to be bound to a button)
+    Wrapper function to handle the next step. 
     """
 
     # if the index is less than 0, the index has to be set to 0 to ensure a valid operation
@@ -555,12 +562,23 @@ def next_step_func(start_idx):
 
     # if the index is smaller than the length of the roation list a next step operation can be performed
     if start_idx[0] < len(rotations):
+        # get the current move
+        current_move = rotations[start_idx[0]]
         # calling next operation to handle the rotation
         next_step(window, cubies_colors, cube, rotations, start_idx)
         # actualizing the lables
         set_prev_and_next_label(previous_text_label, next_text_label, 1, rotations, start_idx)
         # increasing the index
         start_idx[0] += 1
+        #sending current move to Raspberry Pi
+        try:
+            response = requests.post(
+                f"http://{PI_IP}:{PI_PORT}/move",
+                json=current_move
+            )
+            print("Sent move to Pi:", current_move, response.json())
+        except Exception as e:
+            print("Error sending move to Pi:", e)
 
     # Disabling the next button if there is no next step
     if start_idx[0] == len(rotations):
