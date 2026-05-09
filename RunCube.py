@@ -411,6 +411,7 @@ def solve_optimize_func(rotation_list, list_of_cubies, temp_error, window_, cube
     button_rotate_right.configure(state=DISABLED)
     button_rotate_up.configure(state=DISABLED)
     button_rotate_down.configure(state=DISABLED)
+    solve_optimize_button.configure(state=DISABLED)
     #scramble_button.configure(state=DISABLED)
 
 
@@ -631,22 +632,28 @@ reset_button.configure(width=12, state=DISABLED)
 reset_button.grid(row=20, column=4, columnspan=2)
 
 
-def reset_to_default(list_of_cubies, start_idx, prev_text, next_text):
+def reset_to_default(list_of_cubies, list_of_solved_cubies, start_idx, prev_text, next_text):
     """
     Resetting the GUI to to the  default state.
     """
 
     # Importing the default values
-    import_cube_from_csv(list_of_cubies, "Files_Import/DEFAULT.csv")
+    import_cube_from_csv(list_of_cubies, "Files_Import/IMPORT.csv")
+    import_cube_from_csv(list_of_solved_cubies, "Files_Import/IMPORT.csv")
     # Setting the default colors
     set_colors(window, get_colors_from_cubies(list_of_cubies), cube)
+    set_colors(window, get_colors_from_cubies(list_of_solved_cubies), solved_cube)
     # resetting the index and color list
     start_idx[0] = 0
-    list_of_colors = get_colors_from_cubies(list_of_cubies)
+    list_of_colors_cubies = get_colors_from_cubies(list_of_cubies)
+    list_of_colors_solved_cubies = get_colors_from_cubies(list_of_solved_cubies)
 
-    for i, item in enumerate(list_of_colors):
+    for i, item in enumerate(list_of_colors_cubies):
         cubies_colors[i] = item
 
+    for i, item in enumerate(list_of_colors_solved_cubies):
+        solved_cubies_colors[i] = item
+    
     # resetting the labels
     prev_text.configure(text="There is no previous step.")
     next_text.configure(text="You have to generate a solution first to see the correct steps.")
@@ -660,7 +667,7 @@ def reset_to_default(list_of_cubies, start_idx, prev_text, next_text):
 
 # Setting up the default reset button
 reset_to_default_button = Button(root, text="Reset to Default",
-                                 command=lambda: reset_to_default(cubies_list, lauf_idx,
+                                 command=lambda: reset_to_default(cubies_list,solved_cubies_list, lauf_idx,
                                                                   previous_text_label, next_text_label))
 reset_to_default_button.configure(width=12)
 reset_to_default_button.grid(row=2, column=11)
