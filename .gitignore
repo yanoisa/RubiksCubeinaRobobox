@@ -3,3 +3,4 @@
 __pycache__/
 AUTOSAVE.csv
 AUTOSAVE_START.csv
+.vscode/settings.json
