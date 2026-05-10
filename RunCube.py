@@ -573,10 +573,10 @@ def next_step_func(start_idx):
         #sending current move to Raspberry Pi
         try:
             response = requests.post(
-                f"http://{PI_IP}:{PI_PORT}/move",
-                json=current_move
+                f"http://{PI_IP}:{PI_PORT}/trigger",
+                json={"move_sequence": [current_move]}
             )
-            print("Sent move to Pi:", current_move, response.json())
+            print("Sent move to Pi:", current_move, "Response:", response.json())
         except Exception as e:
             print("Error sending move to Pi:", e)
 
