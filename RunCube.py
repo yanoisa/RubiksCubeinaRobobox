@@ -495,7 +495,6 @@ def scramble_func():
     scramble(cubies_list, cubies_id, scramble_rotations)
     set_colors(window, get_colors_from_cubies(cubies_list), cube)
 
-
 # Setting up the scramble button
 #scramble_button = Button(root, text="Scramble", command=scramble_func)
 #scramble_button.configure(width=5, state=NORMAL)
@@ -531,8 +530,20 @@ def previous_step_func(start_idx):
         #current_move = rotations[start_idx[0]]
         # decreasing the index
         start_idx[0] -= 1
+        current_move = rotations[start_idx[0]]
+        current_move = invert_move(current_move)
         # calling previous operation to handle the rotation
         previous_step(window, cubies_colors, cube, rotations, start_idx)
+
+        try:
+            response = requests.post(
+                f"http://{PI_IP}:{PI_PORT}/trigger",
+                json={"move_sequence": [current_move]}
+            )
+            print("Sent move to Pi:", current_move, "Response:", response.json())
+        except Exception as e:
+            print("Error sending move to Pi:", e)
+
         # actualizing the lables
         set_prev_and_next_label(previous_text_label, next_text_label, -1, rotations, start_idx)
 
@@ -594,6 +605,12 @@ next_step_button = Button(root, text="next", command=lambda: next_step_func(lauf
 next_step_button.configure(width=12, state=DISABLED)
 next_step_button.grid(row=19, column=5, sticky=W+E)
 
+def invert_move(move):
+    if move.endswith("'"):
+        return move[:-1]
+    else:
+        return move + "'"
+     
 
 def set_which_cube_to_1(select_cube):
     """
