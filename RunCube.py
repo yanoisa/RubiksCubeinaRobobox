@@ -418,6 +418,7 @@ def solve_optimize_func(rotation_list, list_of_cubies, temp_error, window_, cube
     button_rotate_up.configure(state=DISABLED)
     button_rotate_down.configure(state=DISABLED)
     solve_optimize_button.configure(state=DISABLED)
+    auto_button.configure(state=NORMAL)
     #scramble_button.configure(state=DISABLED)
 
 
@@ -499,6 +500,40 @@ def scramble_func():
 #scramble_button = Button(root, text="Scramble", command=scramble_func)
 #scramble_button.configure(width=5, state=NORMAL)
 #scramble_button.grid(row=23, column=9)
+timer_aktiv = False
+after_id = None
+def meine_funktion():
+    """Die Funktion, die alle 10 Sekunden ausgeführt werden soll."""
+    print("Funktion wurde ausgeführt!")
+
+def auto_func():
+    """
+    Function to automatically press next button every seconds
+    """
+    global timer_aktiv, after_id
+    
+    if not timer_aktiv:
+        # Loop starten
+        timer_aktiv = True
+        auto_button.config(text="Auto Stop")
+        loop_schleife()
+    else:
+        # Loop stoppen
+        timer_aktiv = False
+        auto_button.config(text="Auto Start")
+        if after_id:
+            root.after_cancel(after_id) # Laufenden Timer abbrechen
+
+def loop_schleife():
+    global after_id
+    if timer_aktiv:
+        next_step_func(lauf_idx)
+        # 10000 Millisekunden = 10 Sekunden
+        after_id = root.after(10000, loop_schleife)
+# Setting up the auto button
+auto_button = Button(root, text="Auto Start", command=auto_func)
+auto_button.configure(width=8, state=DISABLED)
+auto_button.grid(row=23, column=4, columnspan=2)
 
 # Setting up the previous labels
 previous_label = Label(root, font=hint_font_bold, text="Previous step:")
