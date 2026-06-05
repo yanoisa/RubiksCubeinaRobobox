@@ -501,16 +501,12 @@ def scramble_func():
 #scramble_button.configure(width=5, state=NORMAL)
 #scramble_button.grid(row=23, column=9)
 timer_aktiv = False
-after_id = None
-def meine_funktion():
-    """Die Funktion, die alle 10 Sekunden ausgeführt werden soll."""
-    print("Funktion wurde ausgeführt!")
+next_step_auto = None
 
 def auto_func():
     """
     Function to automatically press next button every seconds
     """
-    global timer_aktiv, after_id
     
     if not timer_aktiv:
         # Loop starten
@@ -521,15 +517,15 @@ def auto_func():
         # Loop stoppen
         timer_aktiv = False
         auto_button.config(text="Auto Start")
-        if after_id:
-            root.after_cancel(after_id) # Laufenden Timer abbrechen
+        if next_step_auto:
+            root.after_cancel(next_step_auto) # Laufenden Timer abbrechen
 
 def loop_schleife():
-    global after_id
+    global next_step_auto
     if timer_aktiv:
         next_step_func(lauf_idx)
         # 10000 Millisekunden = 10 Sekunden
-        after_id = root.after(10000, loop_schleife)
+        next_step_auto = root.after(2000, loop_schleife)
 # Setting up the auto button
 auto_button = Button(root, text="Auto Start", command=auto_func)
 auto_button.configure(width=8, state=DISABLED)
@@ -562,7 +558,6 @@ def previous_step_func(start_idx):
 
     # if the index is greater than 0, a valid previous operation can be performed
     if start_idx[0] > 0:
-        #current_move = rotations[start_idx[0]]
         # decreasing the index
         start_idx[0] -= 1
         current_move = rotations[start_idx[0]]
