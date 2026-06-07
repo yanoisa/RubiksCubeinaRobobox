@@ -507,7 +507,7 @@ def auto_func():
     """
     Function to automatically press next button every seconds
     """
-    
+    global timer_aktiv, next_step_auto
     if not timer_aktiv:
         # Loop starten
         timer_aktiv = True
@@ -521,7 +521,7 @@ def auto_func():
             root.after_cancel(next_step_auto) # Laufenden Timer abbrechen
 
 def loop_schleife():
-    global next_step_auto
+    global next_step_auto, timer_aktiv
     if timer_aktiv:
         next_step_func(lauf_idx)
         # 10000 Millisekunden = 10 Sekunden
