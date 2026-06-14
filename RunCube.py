@@ -413,6 +413,7 @@ def solve_optimize_func(rotation_list, list_of_cubies, temp_error, window_, cube
         solve_optimize_button.configure(state=DISABLED)
         button_rotations_export_to_file.configure(state=DISABLED)
 
+    # diabling and enabling of the buttons
     button_rotate_left.configure(state=DISABLED)
     button_rotate_right.configure(state=DISABLED)
     button_rotate_up.configure(state=DISABLED)
@@ -496,17 +497,22 @@ def scramble_func():
     scramble(cubies_list, cubies_id, scramble_rotations)
     set_colors(window, get_colors_from_cubies(cubies_list), cube)
 
+#right now scramble is not used
+
 # Setting up the scramble button
 #scramble_button = Button(root, text="Scramble", command=scramble_func)
 #scramble_button.configure(width=5, state=NORMAL)
 #scramble_button.grid(row=23, column=9)
+
+#used for the Auto_Func
 timer_aktiv = False
 next_step_auto = None
 
 def auto_func():
     """
-    Function to automatically press next button every seconds
+    Function to automatically press next button every few seconds
     """
+    #variables to 
     global timer_aktiv, next_step_auto
     if not timer_aktiv:
         # Loop starten
@@ -518,14 +524,14 @@ def auto_func():
         timer_aktiv = False
         auto_button.config(text="Auto Start")
         if next_step_auto:
-            root.after_cancel(next_step_auto) # Laufenden Timer abbrechen
+            root.after_cancel(next_step_auto) # cancel current timer
 
 def loop_schleife():
     global next_step_auto, timer_aktiv
     if timer_aktiv:
         next_step_func(lauf_idx)
-        # 10000 Millisekunden = 10 Sekunden
-        next_step_auto = root.after(2000, loop_schleife)
+        # 1000 milliseconds = 1 Second
+        next_step_auto = root.after(1000, loop_schleife)
 # Setting up the auto button
 auto_button = Button(root, text="Auto Start", command=auto_func)
 auto_button.configure(width=8, state=DISABLED)
@@ -617,7 +623,9 @@ def next_step_func(start_idx):
                 f"http://{PI_IP}:{PI_PORT}/trigger",
                 json={"move_sequence": [current_move]}
             )
+            #prints out the move
             print("Sent move to Pi:", current_move, "Response:", response.json())
+        #usually happens if there is no connection
         except Exception as e:
             print("Error sending move to Pi:", e)
 
@@ -635,6 +643,7 @@ next_step_button = Button(root, text="next", command=lambda: next_step_func(lauf
 next_step_button.configure(width=12, state=DISABLED)
 next_step_button.grid(row=19, column=5, sticky=W+E)
 
+# Invert the last move. This is the opposite Move of 
 def invert_move(move):
     if move.endswith("'"):
         return move[:-1]
@@ -727,6 +736,7 @@ def reset_to_default(list_of_cubies, list_of_solved_cubies, start_idx, prev_text
     button_rotate_right.configure(state=NORMAL)
     button_rotate_up.configure(state=NORMAL)
     button_rotate_down.configure(state=NORMAL)
+    auto_button.configure(state=DISABLED)
     #scramble_button.configure(state=NORMAL)
 
 
